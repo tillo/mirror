@@ -23,7 +23,7 @@ RUN useradd -d /home/mirror -m -s /bin/bash -U mirror
 
 WORKDIR /home/mirror
 
-COPY --chown=mirror:mirror --chmod=700 syncgp syncba ./
+COPY --chown=mirror:mirror --chmod=700 sync-gp sync-ba ./
 
 RUN mkdir -p /srv/ftp && chown -R mirror:mirror /srv/ftp
 
