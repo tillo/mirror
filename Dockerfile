@@ -25,10 +25,14 @@ WORKDIR /home/mirror
 
 COPY --chown=mirror:mirror --chmod=700 sync-gp sync-ba ./
 
-RUN mkdir -p /srv/ftp && chown -R mirror:mirror /srv/ftp
+RUN mkdir -p /srv/ftp /var/www/html/ftp && chown -R mirror:mirror /srv/ftp /var/www/html/ftp
 
 COPY vsftpd.conf /etc/
 COPY lighttpd.conf /etc/lighttpd/
+
+RUN echo '/srv/ftp /var/www/html/ftp none rw,bind 0 0' >> /etc/fstab
+RUN systemctl daemon-reload
+RUN mount /srv/ftp -o bind /var/www/html/ftp
 
 RUN echo '7,37 * * * * mirror ./sync-gp >/dev/null' >> /etc/crontab
 RUN echo '40 */2 * * * mirror ./sync-ba >/dev/null' >> /etc/crontab
