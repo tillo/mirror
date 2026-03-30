@@ -31,7 +31,6 @@ COPY vsftpd.conf /etc/
 COPY lighttpd.conf /etc/lighttpd/
 
 RUN echo '/srv/ftp /var/www/html/ftp none rw,bind 0 0' >> /etc/fstab
-RUN mount /srv/ftp -o bind /var/www/html/ftp
 
 COPY index.html /var/www/html/
 
