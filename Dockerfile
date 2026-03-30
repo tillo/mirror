@@ -34,6 +34,8 @@ RUN echo '/srv/ftp /var/www/html/ftp none rw,bind 0 0' >> /etc/fstab
 RUN systemctl daemon-reload
 RUN mount /srv/ftp -o bind /var/www/html/ftp
 
+COPY index.html /var/www/html/
+
 RUN echo '7,37 * * * * mirror ./sync-gp >/dev/null' >> /etc/crontab
 RUN echo '40 */2 * * * mirror ./sync-ba >/dev/null' >> /etc/crontab
 
