@@ -12,12 +12,14 @@ ENV PACKAGES="\
   rsync \
   util-linux \
   lighttpd \
+  lighttpd-mod-openssl \
+  rsync \
 "\
   DEBIAN_FRONTEND=noninteractive
 
 RUN apt update -y && apt install -y --no-install-recommends $PACKAGES && apt clean all
 
-RUN systemctl enable cron vsftpd lighttpd
+RUN systemctl enable cron vsftpd lighttpd rsyncd
 
 RUN useradd -d /home/mirror -m -s /bin/bash -U mirror
 
@@ -29,6 +31,7 @@ RUN mkdir -p /srv/ftp /var/www/html/ftp && chown -R mirror:mirror /srv/ftp /var/
 
 COPY vsftpd.conf /etc/
 COPY lighttpd.conf /etc/lighttpd/
+COPY rsyncd.conf /etc/
 
 RUN echo '/srv/ftp /var/www/html/ftp none rw,bind 0 0' >> /etc/fstab
 
