@@ -19,7 +19,7 @@ ENV PACKAGES="\
 
 RUN apt update -y && apt install -y --no-install-recommends $PACKAGES && apt clean all
 
-RUN systemctl enable cron vsftpd lighttpd rsyncd
+RUN systemctl enable cron vsftpd lighttpd rsync
 
 RUN useradd -d /home/mirror -m -s /bin/bash -U mirror
 
