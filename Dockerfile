@@ -21,6 +21,8 @@ RUN apt update -y && apt install -y --no-install-recommends $PACKAGES && apt cle
 
 RUN systemctl enable cron vsftpd lighttpd rsync
 
+RUN bash -c "systemctl mask getty@tty{1,2,3,4,5,6}"
+
 RUN useradd -d /home/mirror -m -s /bin/bash -U mirror
 
 WORKDIR /home/mirror
