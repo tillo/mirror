@@ -25,19 +25,15 @@ RUN bash -c "systemctl mask getty@tty{1,2,3,4,5,6}"
 
 RUN useradd -d /home/mirror -m -s /bin/bash -U mirror
 
-WORKDIR /home/mirror
-
-COPY --chown=mirror:mirror --chmod=700 sync-gp sync-ba ./
+COPY --chown=mirror:mirror --chmod=700 sync-gp sync-ba /home/mirror
 
 RUN mkdir -p /srv/ftp /var/www/html/ftp && chown -R mirror:mirror /srv/ftp /var/www/html/ftp
 
-COPY vsftpd.conf /etc/
 COPY lighttpd.conf /etc/lighttpd/
-COPY rsyncd.conf /etc/
+COPY vsftpd.conf motd rsyncd.conf /etc/
+COPY index.html /var/www/html/
 
 RUN echo '/srv/ftp /var/www/html/ftp none rw,bind 0 0' >> /etc/fstab
-
-COPY index.html /var/www/html/
 
 RUN echo '7,37 * * * * mirror ./sync-gp >/dev/null' >> /etc/crontab
 RUN echo '40 */2 * * * mirror ./sync-ba >/dev/null' >> /etc/crontab
