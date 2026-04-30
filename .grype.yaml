@@ -6,3 +6,4 @@ ignore:
   - vulnerability: CVE-2026-4878  # distro maintainer declared wont-fix; no patch available
   - vulnerability: CVE-2026-5450  # distro maintainer declared wont-fix; no patch available
   - vulnerability: CVE-2026-5928  # distro maintainer declared wont-fix; no patch available
+  - vulnerability: CVE-2026-5435  # not-fixed; deprecated libc DNS helpers (ns_printrrf/fp_nquery), not used by rsync/vsftpd/lighttpd
