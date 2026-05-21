@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /ftp/
+
+Sitemap: https://mirror.mdapi.ch/sitemap.xml

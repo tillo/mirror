@@ -37,7 +37,7 @@ RUN mkdir -p /srv/ftp /var/www/html/ftp && chown -R mirror:mirror /srv/ftp /var/
 
 COPY lighttpd.conf /etc/lighttpd/
 COPY vsftpd.conf motd rsyncd.conf /etc/
-COPY index.html /var/www/html/
+COPY index.html robots.txt sitemap.xml /var/www/html/
 
 RUN echo '/srv/ftp /var/www/html/ftp none rw,bind 0 0' >> /etc/fstab
 
