@@ -1,4 +1,5 @@
-FROM gitlab.mdapi.ch/mdapi/dependency_proxy/containers/debian:stable
+ARG REGISTRY=
+FROM ${REGISTRY}debian:stable
 
 ENV PACKAGES="\
   wget \
