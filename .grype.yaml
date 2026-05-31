@@ -1,9 +1,16 @@
 ignore:
-  - vulnerability: CVE-2025-13151  # distro maintainer declared wont-fix; no patch available
-  - vulnerability: CVE-2025-69720  # distro maintainer declared wont-fix; no patch available
-  - vulnerability: CVE-2026-4046  # distro maintainer declared wont-fix; no patch available
-  - vulnerability: CVE-2026-4437  # distro maintainer declared wont-fix; no patch available
-  - vulnerability: CVE-2026-4878  # distro maintainer declared wont-fix; no patch available
-  - vulnerability: CVE-2026-5450  # distro maintainer declared wont-fix; no patch available
-  - vulnerability: CVE-2026-5928  # distro maintainer declared wont-fix; no patch available
-  - vulnerability: CVE-2026-5435  # not-fixed; deprecated libc DNS helpers (ns_printrrf/fp_nquery), not used by rsync/vsftpd/lighttpd
+  - vulnerability: CVE-2025-13151
+  - vulnerability: CVE-2025-69720
+  - vulnerability: CVE-2026-4046
+  - vulnerability: CVE-2026-4437
+  - vulnerability: CVE-2026-4878
+  - vulnerability: CVE-2026-5450
+  - vulnerability: CVE-2026-5928
+  - vulnerability: CVE-2026-5435
+
+  # --- added by curator on 2026-05-31 (UTC) ---
+  # Critical — upstream won't-fix
+  - vulnerability: CVE-2026-8376
+    package:
+      name: perl-base
+      type: deb
