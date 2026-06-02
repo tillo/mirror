@@ -9,8 +9,8 @@ RSYNC="/usr/bin/rsync"
 OPTS="--quiet --recursive --links --perms --times -D --delete --timeout=300"
 
 # OpenWrt releases tree only (no snapshots/), to keep this mirror disk-light.
-SRC1="rsync://downloads.openwrt.org/downloads/releases/"
-SRC2="rsync://mirror.dogado.de/openwrt/releases/"
+SRC1="rsync://ftp.surfnet.nl/openwrt/releases/"
+SRC2="rsync://downloads.openwrt.org/downloads/releases/"
 
 DST="/srv/ftp/openwrt/"
 
