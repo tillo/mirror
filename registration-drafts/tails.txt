@@ -5,8 +5,13 @@ Hi,
 
 I'd like to add my server to the Tails mirror pool.
 
-  HTTPS:  https://tails.mdapi.ch/
-  rsync:  rsync://mirror.mdapi.ch/tails
+  Base URL:  https://tails.mdapi.ch/tails/
+  Rsync:     rsync://mirror.mdapi.ch/tails
+
+The HTTPS vhost serves the `amnesia-archive` rsync tree at its root, so
+the upstream `tails/` directory ends up one level under the hostname —
+same shape as the `/pub/tails/` prefix in your Apache example, just
+without the redirect.
 
 The mirror uses a dedicated hostname per the setup guide, serves the
 archive at the root of the vhost over HTTPS and HTTP (HSTS-redirected to
