@@ -8,8 +8,8 @@
 RSYNC="/usr/bin/rsync"
 OPTS="--quiet --recursive --links --perms --times -D --delete --timeout=300"
 
-SRC1="rsync://rsync.tails.net/tails/"
-SRC2="rsync://mirrors.wikimedia.org/tails-full/"
+SRC1="rsync://rsync.torproject.org/amnesia-archive/"
+SRC2="rsync://archive.torproject.org/amnesia-archive/"
 
 DST="/srv/ftp/tails/"
 
