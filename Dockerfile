@@ -44,7 +44,9 @@ RUN echo '/srv/ftp /var/www/html/ftp none rw,bind 0 0' >> /etc/fstab
 
 RUN echo '7,37 * * * * mirror ./sync-gp >/dev/null' >> /etc/crontab
 RUN echo '40 */2 * * * mirror ./sync-ba >/dev/null' >> /etc/crontab
-RUN echo '17 0,4,8,12,16,20 * * * mirror ./sync-tails >/dev/null' >> /etc/crontab
+# Tails wants hourly + 0..40min jitter; the jitter is implemented inside sync-tails
+# (see https://tails.net/contribute/how/mirror/).
+RUN echo '0 * * * * mirror ./sync-tails >/dev/null' >> /etc/crontab
 RUN echo '45 0,4,8,12,16,20 * * * mirror ./sync-as >/dev/null' >> /etc/crontab
 
 ENTRYPOINT ["/usr/lib/systemd/systemd"]
