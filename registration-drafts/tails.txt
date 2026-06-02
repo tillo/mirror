@@ -1,0 +1,22 @@
+To: sysadmins@tails.net
+Subject: New Tails mirror — mirror.mdapi.ch
+
+Hi,
+
+I'd like to add my server to the Tails mirror list.
+
+  HTTPS:  https://mirror.mdapi.ch/ftp/tails/
+  rsync:  rsync://mirror.mdapi.ch/tails
+
+The mirror syncs from rsync.torproject.org module amnesia-archive every
+4 hours (the same module Tails recommends in its mirror docs).
+
+Location: Echallens, Switzerland
+Bandwidth: 10 Gbps dual-stack FTTH (IPv4 + IPv6)
+ServerAdmin (for public listing): tillo@tillo.ch
+
+Please let me know if you'd like any change in path, cadence or fetch
+source.
+
+Thanks,
+Martino Dell'Ambrogio
