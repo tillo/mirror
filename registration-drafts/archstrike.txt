@@ -1,0 +1,28 @@
+Where to post: ArchStrike doesn't appear to maintain an official public
+                 mirror list. Best route is the IRC channel #archstrike on
+                 Libera.Chat or a GitHub issue at
+                 https://github.com/ArchStrike/ArchStrike/issues asking how
+                 to announce a new community mirror.
+
+Subject: Offering a new ArchStrike mirror — mirror.mdapi.ch
+
+Hi,
+
+I'd like to offer a new ArchStrike mirror.
+
+  HTTPS:  https://mirror.mdapi.ch/ftp/archstrike/
+  FTPS:   ftp://mirror.mdapi.ch/archstrike/
+  rsync:  rsync://mirror.mdapi.ch/archstrike
+
+The mirror syncs from rsync://mirrors.dotsrc.org/archstrike/ every 4
+hours.
+
+Location: Echallens, Switzerland
+Bandwidth: 10 Gbps dual-stack FTTH (IPv4 + IPv6)
+Operator: Martino Dell'Ambrogio <tillo@tillo.ch>
+
+I already operate a public BlackArch mirror on the same host. Please let
+me know if/how to get listed in any official ArchStrike mirror directory.
+
+Thanks,
+Martino

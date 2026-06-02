@@ -32,7 +32,7 @@ RUN bash -c "systemctl mask getty@tty{1,2,3,4,5,6}"
 
 RUN useradd -d /home/mirror -m -s /bin/bash -U mirror
 
-COPY --chown=mirror:mirror --chmod=700 sync-gp sync-ba sync-tails /home/mirror
+COPY --chown=mirror:mirror --chmod=700 sync-gp sync-ba sync-tails sync-as /home/mirror
 
 RUN mkdir -p /srv/ftp /var/www/html/ftp && chown -R mirror:mirror /srv/ftp /var/www/html/ftp
 
@@ -45,5 +45,6 @@ RUN echo '/srv/ftp /var/www/html/ftp none rw,bind 0 0' >> /etc/fstab
 RUN echo '7,37 * * * * mirror ./sync-gp >/dev/null' >> /etc/crontab
 RUN echo '40 */2 * * * mirror ./sync-ba >/dev/null' >> /etc/crontab
 RUN echo '17 0,4,8,12,16,20 * * * mirror ./sync-tails >/dev/null' >> /etc/crontab
+RUN echo '45 0,4,8,12,16,20 * * * mirror ./sync-as >/dev/null' >> /etc/crontab
 
 ENTRYPOINT ["/usr/lib/systemd/systemd"]
