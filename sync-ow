@@ -1,0 +1,24 @@
+#!/bin/bash
+
+(
+
+# Wait for lock on $0.lock (fd 200) for 10 seconds
+/usr/bin/flock -x -w 10 200 || exit 1
+
+RSYNC="/usr/bin/rsync"
+OPTS="--quiet --recursive --links --perms --times -D --delete --timeout=300"
+
+# OpenWrt releases tree only (no snapshots/), to keep this mirror disk-light.
+SRC1="rsync://downloads.openwrt.org/downloads/releases/"
+SRC2="rsync://mirror.dogado.de/openwrt/releases/"
+
+DST="/srv/ftp/openwrt/"
+
+echo "Started update at" `date` >> $0.log 2>&1
+/usr/bin/logger -t sync-ow "Re-rsyncing the OpenWrt releases tree"
+${RSYNC} ${OPTS} ${SRC1} ${DST} >> $0.log 2>&1 || \
+${RSYNC} ${OPTS} ${SRC2} ${DST} >> $0.log 2>&1
+
+echo "End: "`date` >> $0.log 2>&1
+
+) 200>$0.lock
