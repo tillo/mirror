@@ -45,8 +45,8 @@ RUN echo '/srv/ftp /var/www/html/ftp none rw,bind 0 0' >> /etc/fstab
 RUN echo '7,37 * * * * mirror ./sync-gp >/dev/null' >> /etc/crontab
 RUN echo '40 */2 * * * mirror ./sync-ba >/dev/null' >> /etc/crontab
 RUN echo '5,35 * * * * mirror ./sync-ow >/dev/null' >> /etc/crontab
-RUN echo '12 */4 * * * mirror ./sync-tor >/dev/null' >> /etc/crontab
-RUN echo '17 */4 * * * mirror ./sync-tails >/dev/null' >> /etc/crontab
-RUN echo '22 */4 * * * mirror ./sync-wh >/dev/null' >> /etc/crontab
+RUN echo '12 0,4,8,12,16,20 * * * mirror ./sync-tor >/dev/null' >> /etc/crontab
+RUN echo '17 0,4,8,12,16,20 * * * mirror ./sync-tails >/dev/null' >> /etc/crontab
+RUN echo '22 0,4,8,12,16,20 * * * mirror ./sync-wh >/dev/null' >> /etc/crontab
 
 ENTRYPOINT ["/usr/lib/systemd/systemd"]
