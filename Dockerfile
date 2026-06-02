@@ -47,6 +47,9 @@ RUN echo '40 */2 * * * mirror ./sync-ba >/dev/null' >> /etc/crontab
 # Tails wants hourly + 0..40min jitter; the jitter is implemented inside sync-tails
 # (see https://tails.net/contribute/how/mirror/).
 RUN echo '0 * * * * mirror ./sync-tails >/dev/null' >> /etc/crontab
-RUN echo '45 0,4,8,12,16,20 * * * mirror ./sync-as >/dev/null' >> /etc/crontab
+# `45 0,4,8,12,16,20 * * *` silently fails to fire in Debian Vixie /etc/crontab
+# (cron parses it but the scheduler never matches it). Hourly works and the
+# bandwidth/disk delta vs every-4h is negligible for a 20 GB tree.
+RUN echo '45 * * * * mirror ./sync-as >/dev/null' >> /etc/crontab
 
 ENTRYPOINT ["/usr/lib/systemd/systemd"]
