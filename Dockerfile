@@ -15,6 +15,8 @@ ENV PACKAGES="\
   lighttpd \
   lighttpd-mod-openssl \
   rsync \
+  fuse3 \
+  mergerfs \
 "\
   DEBIAN_FRONTEND=noninteractive
 
@@ -34,13 +36,23 @@ RUN useradd -d /home/mirror -m -s /bin/bash -U mirror
 
 COPY --chown=mirror:mirror --chmod=700 sync-gp sync-ba sync-tails sync-as /home/mirror
 
-RUN mkdir -p /srv/ftp /var/www/html/ftp && chown -R mirror:mirror /srv/ftp /var/www/html/ftp
+RUN mkdir -p /srv /var/www/html/ftp /mnt/disk1 /mnt/disk2 && \
+    chown -R mirror:mirror /srv /var/www/html/ftp /mnt/disk1 /mnt/disk2
 
 COPY lighttpd.conf /etc/lighttpd/
 COPY vsftpd.conf motd rsyncd.conf /etc/
 COPY index.html robots.txt sitemap.xml /var/www/html/
 
-RUN echo '/srv/ftp /var/www/html/ftp none rw,bind 0 0' >> /etc/fstab
+# mergerfs union of all /mnt/disk* branches at /srv. category.create=epmfs
+# ("existing path, most-free-space"): updates to existing trees keep landing on
+# the branch that already holds them; new top-level paths land on the branch
+# with the most free space. minfreespace=20G stops new writes once a branch is
+# nearly full. fstab line order matters — mergerfs must mount before the bind
+# mount that depends on /srv/ftp.
+RUN { \
+      echo '/mnt/disk*  /srv  fuse.mergerfs  defaults,allow_other,use_ino,cache.files=partial,dropcacheonclose=true,category.create=epmfs,minfreespace=20G,fsname=mergerfs  0  0'; \
+      echo '/srv/ftp /var/www/html/ftp none rw,bind 0 0'; \
+    } >> /etc/fstab
 
 RUN echo '7,37 * * * * mirror ./sync-gp >/dev/null' >> /etc/crontab
 RUN echo '40 */2 * * * mirror ./sync-ba >/dev/null' >> /etc/crontab
