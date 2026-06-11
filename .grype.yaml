@@ -1,6 +1,10 @@
 ignore:
+  - vulnerability: CVE-2026-8376
+    package:
+      name: perl-base
+      type: deb
 
-  # --- added by curator on 2026-06-09 (UTC) ---
+  # --- added by curator on 2026-06-11 (UTC) ---
   # High — upstream won't-fix
   - vulnerability: CVE-2025-13151
     package:
