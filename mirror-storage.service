@@ -1,0 +1,13 @@
+[Unit]
+Description=Mirror /srv storage setup (mergerfs union for legacy multi-disk, single Ceph volume otherwise)
+After=local-fs.target
+Before=lighttpd.service vsftpd.service rsync.service cron.service
+ConditionPathExists=/usr/local/bin/mirror-storage.sh
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/mirror-storage.sh
+
+[Install]
+WantedBy=multi-user.target

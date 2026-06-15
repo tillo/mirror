@@ -43,16 +43,17 @@ COPY lighttpd.conf /etc/lighttpd/
 COPY vsftpd.conf motd rsyncd.conf /etc/
 COPY index.html robots.txt sitemap.xml /var/www/html/
 
-# mergerfs union of all /mnt/disk* branches at /srv. category.create=epmfs
-# ("existing path, most-free-space"): updates to existing trees keep landing on
-# the branch that already holds them; new top-level paths land on the branch
-# with the most free space. minfreespace=20G stops new writes once a branch is
-# nearly full. fstab line order matters — mergerfs must mount before the bind
-# mount that depends on /srv/ftp.
-RUN { \
-      echo '/mnt/disk*  /srv  fuse.mergerfs  defaults,allow_other,use_ino,cache.files=partial,dropcacheonclose=true,category.create=epmfs,minfreespace=20G,fsname=mergerfs  0  0'; \
-      echo '/srv/ftp /var/www/html/ftp none rw,bind 0 0'; \
-    } >> /etc/fstab
+# /srv content store is set up at boot by mirror-storage.service (oneshot,
+# ordered before the serving daemons), which supports two layouts from one image:
+#   * legacy multi-disk -> mergerfs union of /mnt/disk* at /srv
+#     (category.create=epmfs, minfreespace=20G — the old fstab behaviour), or
+#   * single volume     -> /srv is a real mount (a Ceph RBD PVC), no mergerfs.
+# In both cases /srv/ftp is bind-mounted onto the lighttpd docroot. This replaces
+# the static fstab mergerfs+bind lines so the same :latest image serves both the
+# legacy Longhorn (mergerfs) deployment and the single-RBD deployment.
+COPY --chmod=755 mirror-storage.sh /usr/local/bin/mirror-storage.sh
+COPY mirror-storage.service /etc/systemd/system/mirror-storage.service
+RUN systemctl enable mirror-storage.service
 
 RUN echo '7,37 * * * * mirror ./sync-gp >/dev/null' >> /etc/crontab
 RUN echo '40 */2 * * * mirror ./sync-ba >/dev/null' >> /etc/crontab
