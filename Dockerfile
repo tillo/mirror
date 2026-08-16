@@ -34,7 +34,7 @@ RUN bash -c "systemctl mask getty@tty{1,2,3,4,5,6}"
 
 RUN useradd -d /home/mirror -m -s /bin/bash -U mirror
 
-COPY --chown=mirror:mirror --chmod=700 sync-gp sync-ba sync-tails sync-as /home/mirror
+COPY --chown=mirror:mirror --chmod=700 sync-gp sync-ba sync-tails sync-as sync-ctan sync-gnu sync-slack /home/mirror
 
 RUN mkdir -p /srv /var/www/html/ftp /mnt/disk1 /mnt/disk2 && \
     chown -R mirror:mirror /srv /var/www/html/ftp /mnt/disk1 /mnt/disk2
@@ -64,5 +64,15 @@ RUN echo '0 * * * * mirror ./sync-tails >/dev/null' >> /etc/crontab
 # (cron parses it but the scheduler never matches it). Hourly works and the
 # bandwidth/disk delta vs every-4h is negligible for a 20 GB tree.
 RUN echo '45 * * * * mirror ./sync-as >/dev/null' >> /etc/crontab
+# CTAN requires at least hourly, each mirror on its own random minute (:23 is
+# ours) so the DANTE primary doesn't get every mirror at once.
+RUN echo '23 * * * * mirror ./sync-ctan >/dev/null' >> /etc/crontab
+# GNU asks for nightly as a minimum. Single hour values only — a comma list in
+# the HOUR field silently never fires in Debian's Vixie /etc/crontab (see the
+# sync-as note above).
+RUN echo '40 3 * * * mirror ./sync-gnu >/dev/null' >> /etc/crontab
+# Slackware changes rarely; daily, offset from the GNU run so two large trees
+# don't rsync concurrently.
+RUN echo '50 4 * * * mirror ./sync-slack >/dev/null' >> /etc/crontab
 
 ENTRYPOINT ["/usr/lib/systemd/systemd"]

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+(
+
+# Wait for lock on $0.lock (fd 200) for 10 seconds
+/usr/bin/flock -x -w 10 200 || exit 1
+
+RSYNC="/usr/bin/rsync"
+# Flags are exactly what https://www.gnu.org/server/mirror.html prescribes:
+#   rsync -rltpHS --delete-excluded
+# Note --delete-excluded implies --delete, so removals do propagate; there is
+# deliberately no separate --delete here. --quiet is ours (the doc's command is
+# silent anyway) and --timeout matches the other trees.
+OPTS="--quiet --recursive --links --times --perms --hard-links --sparse --delete-excluded --timeout=300"
+
+# GNU explicitly asks mirrors to pull from an established mirror rather than
+# hammering ftp.gnu.org itself. mirrors.kernel.org is one of the long-standing
+# ones; ftp.gnu.org/gnu/ is the fallback if it ever goes away.
+SRC1="rsync://mirrors.kernel.org/gnu/"
+
+DST="/srv/ftp/gnu/"
+
+echo "Started update at" `date` >> $0.log 2>&1
+/usr/bin/logger -t sync-gnu "Re-rsyncing the GNU tree"
+${RSYNC} ${OPTS} ${SRC1} ${DST} >> $0.log 2>&1
+
+echo "End: "`date` >> $0.log 2>&1
+
+) 200>$0.lock

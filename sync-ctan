@@ -1,0 +1,28 @@
+#!/bin/bash
+
+(
+
+# Wait for lock on $0.lock (fd 200) for 10 seconds
+/usr/bin/flock -x -w 10 200 || exit 1
+
+RSYNC="/usr/bin/rsync"
+# CTAN's registration page prescribes `rsync -av --delete` from the DANTE
+# primary and a sync at least once per hour, each mirror on its own random
+# minute so the node doesn't see every mirror at :00. We keep -a (--archive)
+# and --delete verbatim but swap -v for --quiet: the tree is ~394k files and
+# per-file output would swamp the log. Cron carries our assigned minute.
+OPTS="--quiet --archive --delete --timeout=300"
+
+# rsync.dante.ctan.org is THE primary node — CTAN requires mirrors pull from
+# it rather than from each other.
+SRC1="rsync://rsync.dante.ctan.org/CTAN/"
+
+DST="/srv/ftp/ctan/"
+
+echo "Started update at" `date` >> $0.log 2>&1
+/usr/bin/logger -t sync-ctan "Re-rsyncing the CTAN tree"
+${RSYNC} ${OPTS} ${SRC1} ${DST} >> $0.log 2>&1
+
+echo "End: "`date` >> $0.log 2>&1
+
+) 200>$0.lock
