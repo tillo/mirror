@@ -8,13 +8,19 @@
 RSYNC="/usr/bin/rsync"
 OPTS="--quiet --recursive --links --perms --times -D --delete --timeout=300"
 
-SRC1="rsync://blackarch.org/blackarch/"
-SRC2="rsync://knuth.mirrortr.com/blackarch/"
-SRC3="rsync://blackarch.cdndepo.com/"
-SRC4="rsync://blackarch.mirror.packetfire.org/"
-SRC5="rsync://mirror.team-cymru.org/blackarch/"
-SRC6="rsync://mirror.jmu.edu/blackarch/"
-SRC7="rsync://mirror.oss.maxcdn.com/mirrors/blackarch/"
+# Order = measured health, 2026-09-28. blackarch.org itself resets the
+# connection mid file-list (read error 104 after ~640 KB) on a full-tree pull,
+# and the old SRC2-SRC4 no longer resolve in DNS, so every run fell through to
+# team-cymru, which exits 0 while serving a tree 2 days behind (lastupdate
+# 2026-09-26 07:34 vs upstream 2026-09-28 04:58). rsync reports success on a
+# stale source, so a lagging mirror must never sit ahead of a current one.
+# RWTH Aachen and cyberbits.eu both served the current lastupdate over rsync.
+SRC1="rsync://ftp.halifax.rwth-aachen.de/blackarch/"
+SRC2="rsync://mirror.cyberbits.eu/blackarch/"
+SRC3="rsync://blackarch.org/blackarch/"
+SRC4="rsync://mirror.team-cymru.org/blackarch/"
+SRC5="rsync://mirror.jmu.edu/blackarch/"
+SRC6="rsync://mirror.oss.maxcdn.com/mirrors/blackarch/"
 
 DST="/srv/ftp/blackarch/"
 
@@ -25,8 +31,7 @@ ${RSYNC} ${OPTS} ${SRC2} ${DST} >> $0.log 2>&1 || \
 ${RSYNC} ${OPTS} ${SRC3} ${DST} >> $0.log 2>&1 || \
 ${RSYNC} ${OPTS} ${SRC4} ${DST} >> $0.log 2>&1 || \
 ${RSYNC} ${OPTS} ${SRC5} ${DST} >> $0.log 2>&1 || \
-${RSYNC} ${OPTS} ${SRC6} ${DST} >> $0.log 2>&1 || \
-${RSYNC} ${OPTS} ${SRC7} ${DST} >> $0.log 2>&1
+${RSYNC} ${OPTS} ${SRC6} ${DST} >> $0.log 2>&1
 
 echo "End: "`date` >> $0.log 2>&1
 
