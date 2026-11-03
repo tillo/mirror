@@ -1,5 +1,5 @@
 ARG REGISTRY=
-FROM ${REGISTRY}debian:stable
+FROM ${REGISTRY}debian:trixie-20261027
 
 ENV PACKAGES="\
   wget \
