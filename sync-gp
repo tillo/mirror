@@ -6,7 +6,7 @@
 /usr/bin/flock -x -w 10 200 || exit 1
 
 RSYNC="/usr/bin/rsync"
-OPTS="--quiet --recursive --links --perms --times -D --delete --timeout=300"
+OPTS="--quiet --recursive --links --perms --times -D --delete --delay-updates --delete-delay --timeout=300"
 
 SRC1="rsync://masterportage.gentoo.org/gentoo-portage"
 SRC2="rsync://rsync.ch.gentoo.org/gentoo-portage"
